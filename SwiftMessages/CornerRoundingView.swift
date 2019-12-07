@@ -10,6 +10,7 @@ import UIKit
 
 /// A background view that messages can use for rounding all or a subset of corners with squircles
 /// (the smoother method of rounding corners that you see on app icons).
+//圆角View
 open class CornerRoundingView: UIView {
 
     /// Specifies the corner radius to use.
@@ -76,7 +77,7 @@ open class CornerRoundingView: UIView {
             shapeLayer.path = newPath
         }
     }
-
+    //
     private var cornerRadii: CGSize {
         return CGSize(width: cornerRadius, height: cornerRadius)
     }

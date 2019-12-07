@@ -10,6 +10,7 @@ import Foundation
 
 extension Bundle {
     static func sm_frameworkBundle() -> Bundle {
+        //类型
         let bundle = Bundle(for: MessageView.self)
         if let path = bundle.path(forResource: "SwiftMessages", ofType: "bundle") {
             return Bundle(path: path)!

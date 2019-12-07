@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+//自定义一个Window
 class PassthroughWindow: UIWindow {
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -26,6 +26,6 @@ class PassthroughWindow: UIWindow {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    //weak
     private weak var hitTestView: UIView?
 }

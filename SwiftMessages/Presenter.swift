@@ -11,10 +11,11 @@ import UIKit
 protocol PresenterDelegate: AnimationDelegate {
     func hide(presenter: Presenter)
 }
-
+//弹出框的类
 class Presenter: NSObject {
-
+    //弹出的上下文
     enum PresentationContext {
+        //类型
         case viewController(_: Weak<UIViewController>)
         case view(_: Weak<UIView>)
         
@@ -38,10 +39,12 @@ class Presenter: NSObject {
     }
     
     var config: SwiftMessages.Config
+    //显示的view
     let view: UIView
     weak var delegate: PresenterDelegate?
     let maskingView = MaskingView()
     var presentationContext = PresentationContext.viewController(Weak<UIViewController>(value: nil))
+    //
     let animator: Animator
 
     init(config: SwiftMessages.Config, view: UIView, delegate: PresenterDelegate) {
@@ -53,12 +56,13 @@ class Presenter: NSObject {
             id = identifiable.id
         } else {
             var mutableView = view
+            //指针地址作为id
             id = withUnsafePointer(to: &mutableView) { "\($0)" }
         }
 
         super.init()
     }
-
+    //动画：返回值是一个协议
     private static func animator(forPresentationStyle style: SwiftMessages.PresentationStyle, delegate: AnimationDelegate) -> Animator {
         switch style {
         case .top:
@@ -87,11 +91,11 @@ class Presenter: NSObject {
         }
         return duration
     }
-
+    //记录时间
     var showDate: CFTimeInterval?
 
     private var interactivelyHidden = false;
-
+    //延迟时间
     var delayShow: TimeInterval? {
         if case .indefinite(let opts) = config.duration { return opts.delay }
         return nil
@@ -110,10 +114,11 @@ class Presenter: NSObject {
     /*
      MARK: - Showing and hiding
      */
-
+    //显示
     func show(completion: @escaping AnimationCompletion) throws {
         try presentationContext = getPresentationContext()
         install()
+        //将要显示
         self.config.eventListeners.forEach { $0(.willShow) }
         showAnimation() { completed in
             completion(completed)
@@ -127,16 +132,16 @@ class Presenter: NSObject {
             }
         }
     }
-
+    //动画显示
     private func showAnimation(completion: @escaping AnimationCompletion) {
-
+        //动画设置maskingView的背景色
         func dim(_ color: UIColor) {
             self.maskingView.backgroundColor = UIColor.clear
             UIView.animate(withDuration: 0.2, animations: {
                 self.maskingView.backgroundColor = color
             })
         }
-
+        //动画设置模糊背景
         func blur(style: UIBlurEffect.Style, alpha: CGFloat) {
             let blurView = UIVisualEffectView(effect: nil)
             blurView.alpha = alpha
@@ -173,7 +178,7 @@ class Presenter: NSObject {
             let focus = accessibleMessage.accessibilityElement ?? accessibleMessage.additonalAccessibilityElements?.first else { return }
         UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: focus)
     }
-
+    //隐藏
     var isHiding = false
 
     func hide(animated: Bool, completion: @escaping AnimationCompletion) {
@@ -405,7 +410,7 @@ class Presenter: NSObject {
             }
             maskingView.accessibleElements = elements
         }
-
+        //容器View
         guard let containerView = presentationContext.viewValue() else { return }
         if let windowViewController = presentationContext.viewControllerValue() as? WindowViewController {
             if #available(iOS 13, *) {
@@ -421,6 +426,7 @@ class Presenter: NSObject {
     }
 
     private var becomeKeyWindow: Bool {
+        //可选值的等于
         if config.becomeKeyWindow == .some(true) { return true }
         switch config.dimMode {
         case .gray, .color, .blur:

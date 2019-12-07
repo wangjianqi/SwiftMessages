@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+//顶部
 public class TopBottomAnimation: NSObject, Animator {
 
     public enum Style {
@@ -45,7 +45,7 @@ public class TopBottomAnimation: NSObject, Animator {
         self.style = style
         self.delegate = delegate
     }
-
+    //
     public func show(context: AnimationContext, completion: @escaping AnimationCompletion) {
         NotificationCenter.default.addObserver(self, selector: #selector(adjustMargins), name: UIDevice.orientationDidChangeNotification, object: nil)
         install(context: context)
@@ -125,7 +125,7 @@ public class TopBottomAnimation: NSObject, Animator {
             }
         }
     }
-
+    //屏幕旋转
     @objc public func adjustMargins() {
         guard let adjustable = messageView as? MarginAdjustable & UIView,
             let context = context else { return }
@@ -163,7 +163,7 @@ public class TopBottomAnimation: NSObject, Animator {
             #endif
         })
     }
-
+    //
     fileprivate var bounceOffset: CGFloat = 5
 
     /*

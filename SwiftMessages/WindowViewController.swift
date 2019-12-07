@@ -42,7 +42,7 @@ open class WindowViewController: UIViewController
             window.isHidden = false
         }
     }
-
+    //iOS13
     @available(iOS 13, *)
     func install(becomeKey: Bool, scene: UIWindowScene?) {
         guard let window = window else { return }
@@ -73,6 +73,7 @@ open class WindowViewController: UIViewController
 }
 
 extension WindowViewController {
+    //获取Window
     static func newInstance(windowLevel: UIWindow.Level?, config: SwiftMessages.Config) -> WindowViewController {
         return config.windowViewController?(windowLevel, config) ?? WindowViewController(windowLevel: windowLevel, config: config)
     }

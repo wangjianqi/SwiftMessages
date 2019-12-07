@@ -9,7 +9,7 @@
 import UIKit
 
 public typealias AnimationCompletion = (_ completed: Bool) -> Void
-
+//动画
 public protocol AnimationDelegate: class {
     func hide(animator: Animator)
     func panStarted(animator: Animator)
@@ -21,6 +21,7 @@ public protocol AnimationDelegate: class {
  that could require margin adustments on the message view in order to
  get the layouts to look right.
  */
+//OptionSet:
 public struct SafeZoneConflicts: OptionSet {
     public let rawValue: Int
 
@@ -42,7 +43,7 @@ public struct SafeZoneConflicts: OptionSet {
     /// (which seems like an iOS bug). We use the `overStatusBar` to indicate this special case.
     public static let overStatusBar = SafeZoneConflicts(rawValue: 1 << 3)
 }
-
+//动画上下文
 public class AnimationContext {
 
     public let messageView: UIView
@@ -57,12 +58,12 @@ public class AnimationContext {
         self.interactiveHide = interactiveHide
     }
 }
-
+//协议
 public protocol Animator: class {
 
     /// Adopting classes should declare as `weak`.
     var delegate: AnimationDelegate? { get set }
-
+    //显示
     func show(context: AnimationContext, completion: @escaping AnimationCompletion)
 
     func hide(context: AnimationContext, completion: @escaping AnimationCompletion)
@@ -75,7 +76,7 @@ public protocol Animator: class {
     /// such as if using `UIDynamicAnimator`. This value is utilized by `SwiftMessagesSegue`.
     var hideDuration: TimeInterval? { get }
 }
-
+//默认实现
 public extension Animator {
     var showDuration: TimeInterval? { return nil }
     var hideDuration: TimeInterval? { return nil }

@@ -9,7 +9,7 @@
 import UIKit
 
 extension UILabel {
-
+    //设置行间距
     func configureBodyTextStyle() {
         let bodyStyle = NSMutableParagraphStyle()
         bodyStyle.lineSpacing = 5.0

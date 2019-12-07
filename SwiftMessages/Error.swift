@@ -11,7 +11,9 @@ import Foundation
 /**
  The `SwiftMessagesError` enum contains the errors thrown by SwiftMessages.
  */
+//错误
 enum SwiftMessagesError: Error {
     case cannotLoadViewFromNib(nibName: String)
+    //错误类型
     case noRootViewController
 }

@@ -71,6 +71,7 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
      - Parameter insets: The amount to inset the content view from the background view.
        Default is zero inset.
      */
+    //添加内容View
     open func installContentView(_ contentView: UIView, insets: UIEdgeInsets = UIEdgeInsets.zero) {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.addSubview(contentView)
@@ -78,6 +79,7 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
         contentView.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: -insets.bottom).isActive = true
         contentView.leftAnchor.constraint(equalTo: backgroundView.leftAnchor, constant: insets.left).isActive = true
         contentView.rightAnchor.constraint(equalTo: backgroundView.rightAnchor, constant: -insets.right).isActive = true
+        //高度优先级比较低
         contentView.heightAnchor.constraint(equalToConstant: 350).with(priority: UILayoutPriority(rawValue: 200)).isActive = true
     }
 
@@ -90,6 +92,7 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
        assigned to the `backgroundView` property.
      - Parameter insets: The amount to inset the content view from the margins. Default is zero inset.
      */
+    //添加背景view
     open func installBackgroundView(_ backgroundView: UIView, insets: UIEdgeInsets = UIEdgeInsets.zero) {
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         if backgroundView != self {
@@ -155,6 +158,7 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
     /**
      An optional tap handler that will be called when the `backgroundView` is tapped.
      */
+    //点击手势
     open var tapHandler: ((_ view: BaseView) -> Void)? {
         didSet {
             installTapRecognizer()
@@ -169,7 +173,7 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
     @objc func tapped() {
         tapHandler?(self)
     }
-
+    //添加手势
     fileprivate func installTapRecognizer() {
         guard let backgroundView = backgroundView else { return }
         removeGestureRecognizer(tapRecognizer)
@@ -197,7 +201,7 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
      as `@IBInspectables` so that they can be adjusted directly in nib files
      (see MessageView.nib).
      */
-
+    //设置内边距
     public var layoutMarginAdditions: UIEdgeInsets {
         get {
             return UIEdgeInsets(top: topLayoutMarginAddition, left: leftLayoutMarginAddition, bottom: bottomLayoutMarginAddition, right: rightLayoutMarginAddition)
@@ -234,12 +238,13 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
      An optional explicit height for the background view, which can be used if
      the message view's intrinsic content size does not produce the desired height.
      */
+    //设置高度
     open var backgroundHeight: CGFloat? {
         didSet {
             updateBackgroundHeightConstraint()
         }
     }
-
+    //添加高度约束
     private func updateBackgroundHeightConstraint() {
         if let existing = backgroundHeightConstraint {
             let view = existing.firstItem as! UIView
@@ -290,6 +295,7 @@ extension BaseView {
     /// because the background view may be masked. So, when modifying the drop shadow,
     /// be sure to set the shadow properties of this view's layer. The shadow path is
     /// updated for you automatically.
+    //设置阴影
     open func configureDropShadow() {
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
@@ -364,6 +370,7 @@ extension BaseView {
      other constraints. The CardView.nib and TabView.nib layouts are compatible with
      this method.
      */
+    //设置宽度
     public func configureBackgroundView(width: CGFloat) {
         guard let backgroundView = backgroundView else { return }
         let constraint = NSLayoutConstraint(item: backgroundView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: width)

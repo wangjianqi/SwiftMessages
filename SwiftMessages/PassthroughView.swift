@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+//转移：添加点击事件
 class PassthroughView: UIControl {
 
     var tappedHander: (() -> Void)?
@@ -29,7 +29,7 @@ class PassthroughView: UIControl {
     @objc func tapped() {
         tappedHander?()
     }
-    
+    //当有点击事件才响应
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let view = super.hitTest(point, with: event)
         return view == self && tappedHander == nil ? nil : view

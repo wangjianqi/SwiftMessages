@@ -7,11 +7,11 @@
 //
 
 import UIKit
-
+//全屏模式
 private let fullScreenStyles: [UIModalPresentationStyle] = [.fullScreen, .overFullScreen]
 
 extension UIViewController {
-    
+    //
     func sm_selectPresentationContextTopDown(_ config: SwiftMessages.Config) -> UIViewController {
         let topBottomStyle = config.presentationStyle.topBottomStyle
         if let presented = sm_presentedFullScreenViewController() {
@@ -21,9 +21,10 @@ extension UIViewController {
         } else if case .bottom? = topBottomStyle, let tabBarController = sm_selectTabBarControllerTopDown() {
             return tabBarController
         }
+        //获取
         return WindowViewController.newInstance(windowLevel: self.view.window?.windowLevel, config: config)
     }
-    
+    //获取导航控制器
     fileprivate func sm_selectNavigationControllerTopDown() -> UINavigationController? {
         if let presented = sm_presentedFullScreenViewController() {
             return presented.sm_selectNavigationControllerTopDown()
@@ -37,7 +38,7 @@ extension UIViewController {
         }
         return nil
     }
-
+    //获取TabBarController
     fileprivate func sm_selectTabBarControllerTopDown() -> UITabBarController? {
         if let presented = sm_presentedFullScreenViewController() {
             return presented.sm_selectTabBarControllerTopDown()
@@ -51,7 +52,7 @@ extension UIViewController {
         }
         return nil
     }
-    
+    //获取弹出的ViewController
     fileprivate func sm_presentedFullScreenViewController() -> UIViewController? {
         if let presented = self.presentedViewController, fullScreenStyles.contains(presented.modalPresentationStyle) {
             return presented
@@ -61,6 +62,7 @@ extension UIViewController {
 
     func sm_selectPresentationContextBottomUp(_ config: SwiftMessages.Config) -> UIViewController {
         let topBottomStyle = config.presentationStyle.topBottomStyle
+        //父
         if let parent = parent {
             if let navigationController = parent as? UINavigationController {
                 if case .top? = topBottomStyle, navigationController.sm_isVisible(view: navigationController.navigationBar) {
@@ -74,6 +76,7 @@ extension UIViewController {
                 return tabBarController.sm_selectPresentationContextBottomUp(config)
             }
         }
+        //UITableViewController
         if self.view is UITableView {
             // Never select scroll view as presentation context
             // because, you know, it scrolls.
@@ -85,11 +88,12 @@ extension UIViewController {
         }
         return self
     }
-    
+    //是否可见
     func sm_isVisible(view: UIView) -> Bool {
         if view.isHidden { return false }
         if view.alpha == 0.0 { return false }
         let frame = self.view.convert(view.bounds, from: view)
+        //交集
         if !self.view.bounds.intersects(frame) { return false }
         return true
     }

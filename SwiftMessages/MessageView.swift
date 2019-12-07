@@ -183,6 +183,7 @@ extension MessageView {
      
      - Returns: An instance of generic view type `T: MessageView`.
      */
+    //加载Nib
     public static func viewFromNib<T: MessageView>(layout: Layout, filesOwner: AnyObject = NSNull.init()) -> T {
         return try! SwiftMessages.viewFromNib(named: layout.rawValue)
     }
@@ -249,6 +250,7 @@ extension MessageView {
      - Parameter theme: The theme type to use.
      - Parameter iconStyle: The icon style to use. Defaults to `.Default`.
      */
+    //配置主题
     public func configureTheme(_ theme: Theme, iconStyle: IconStyle = .default) {
         let iconImage = iconStyle.image(theme: theme)
         switch theme {
@@ -279,6 +281,7 @@ extension MessageView {
      - Parameter backgroundColor: The background color to use.
      - Parameter foregroundColor: The foreground color to use.
      */
+    //配置样式
     public func configureTheme(backgroundColor: UIColor, foregroundColor: UIColor, iconImage: UIImage? = nil, iconText: String? = nil) {
         iconImageView?.image = iconImage
         iconLabel?.text = iconText
@@ -328,6 +331,7 @@ extension MessageView {
      - Parameter title: The message title to use.
      - Parameter body: The message body text to use.
      */
+    //配置内容
     public func configureContent(title: String, body: String) {
         configureContent(body: body)
         titleLabel?.text = title

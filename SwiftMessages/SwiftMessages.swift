@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+//单例
 private let globalInstance = SwiftMessages()
 
 /**
@@ -21,6 +21,7 @@ open class SwiftMessages {
      Specifies whether the message view is displayed at the top or bottom
      of the selected presentation container.
     */
+    //位置
     public enum PresentationStyle {
         
         /**
@@ -69,6 +70,7 @@ open class SwiftMessages {
          status bar. The only alternative is to set `Config.prefersStatusBarHidden = true`
          to hide it.
         */
+        //显示的层级
         case window(windowLevel: UIWindow.Level)
         
         /**
@@ -157,6 +159,7 @@ open class SwiftMessages {
          - `interactive`: Specifies whether or not tapping the
                           dimmed area dismisses the message view.
          */
+        //交互
         case gray(interactive: Bool)
 
         /**
@@ -179,6 +182,7 @@ open class SwiftMessages {
          - `interactive`: Specifies whether or not tapping the
          dimmed area dismisses the message view.
          */
+        //模糊背景
         case blur(style: UIBlurEffect.Style, alpha: CGFloat, interactive: Bool)
 
         public var interactive: Bool {
@@ -243,6 +247,7 @@ open class SwiftMessages {
          Specifies the duration of the message view's time on screen before it is
          automatically hidden. The default is `.Automatic`.
          */
+        //动画时间
         public var duration = Duration.automatic
         
         /**
@@ -294,6 +299,7 @@ open class SwiftMessages {
         /**
          Specifies an optional array of event listeners.
         */
+        //事件监听
         public var eventListeners: [EventListener] = []
         
         /**
@@ -323,11 +329,13 @@ open class SwiftMessages {
          Use with apps that don't support dark mode to prevent messages from adopting the
          system's interface style.
         */
+        //iOS13
         @available(iOS 13, *)
         public var overrideUserInterfaceStyle: UIUserInterfaceStyle {
             // Note that this is modelled as a computed property because
             // Swift doesn't allow `@available` with stored properties.
             get {
+                //unspecified:未指明的
                 guard let rawValue = overrideUserInterfaceStyleRawValue else { return .unspecified }
                 return UIUserInterfaceStyle(rawValue: rawValue) ?? .unspecified
             }
@@ -342,6 +350,7 @@ open class SwiftMessages {
          `WindowViewController` is needed. Use this if you need to supply a custom subclass
          of `WindowViewController`.
          */
+        //在外部配置window
         public var windowViewController: ((_ windowLevel: UIWindow.Level?, _ config: SwiftMessages.Config) -> WindowViewController)?
 
         /**
@@ -361,6 +370,7 @@ open class SwiftMessages {
      - Parameter config: The configuration options.
      - Parameter view: The view to be displayed.
      */
+    //显示
     open func show(config: Config, view: UIView) {
         let presenter = Presenter(config: config, view: view, delegate: self)
         messageQueue.sync {
@@ -375,6 +385,7 @@ open class SwiftMessages {
      - Parameter config: The configuration options.
      - Parameter view: The view to be displayed.
      */
+    //显示
     public func show(view: UIView) {
         show(config: defaultConfig, view: view)
     }
@@ -496,12 +507,14 @@ open class SwiftMessages {
      Specifies the default configuration to use when calling the variants of
      `show()` that don't take a `config` argument or as a base for custom configs.
      */
+    //默认配置
     public var defaultConfig = Config()
 
     /**
      Specifies the amount of time to pause between removing a message
      and showing the next. Default is 0.5 seconds.
      */
+    //间隔
     open var pauseBetweenMessages: TimeInterval = 0.5
 
     /// Type for keeping track of delayed presentations
@@ -512,7 +525,7 @@ open class SwiftMessages {
         fileprivate func add(presenter: Presenter) {
             ids.insert(presenter.id)
         }
-
+        //删除
         @discardableResult
         fileprivate func remove(presenter: Presenter) -> Bool {
             guard ids.contains(presenter.id) else { return false }
@@ -526,11 +539,13 @@ open class SwiftMessages {
             enqueue(presenter: presenter)
         }
     }
-
+    //队列
     fileprivate let messageQueue = DispatchQueue(label: "it.swiftkick.SwiftMessages", attributes: [])
+    //管理弹框
     fileprivate var queue: [Presenter] = []
     fileprivate var delays = Delays()
     fileprivate var counts: [String : Int] = [:]
+    //记录当前Presenter
     fileprivate var _current: Presenter? = nil {
         didSet {
             if oldValue != nil {
@@ -563,7 +578,7 @@ open class SwiftMessages {
             doEnqueue()
         }
     }
-    
+    //出列下一个
     fileprivate func dequeueNext() {
         guard self._current == nil, queue.count > 0 else { return }
         let current = queue.removeFirst()
@@ -595,7 +610,7 @@ open class SwiftMessages {
             }
         }
     }
-
+    //内部方法：隐藏
     fileprivate func internalHide(id: String) {
         if id == _current?.id {
             hideCurrent()
@@ -603,7 +618,7 @@ open class SwiftMessages {
         queue = queue.filter { $0.id != id }
         delays.ids.remove(id)
     }
- 
+    //隐藏
     fileprivate func hideCurrent(animated: Bool = true) {
         guard let current = _current, !current.isHiding else { return }
         let action = { [weak self] in
@@ -766,6 +781,7 @@ extension SwiftMessages {
      
      - Returns: An instance of generic view type `T`.
      */
+    //加载nib
     public class func viewFromNib<T: UIView>(_ filesOwner: AnyObject = NSNull.init()) throws -> T {
         let name = T.description().components(separatedBy: ".").last
         assert(name != nil)
@@ -785,6 +801,7 @@ extension SwiftMessages {
      
      - Returns: An instance of generic view type `T`.
      */
+    //从nib加载
     public class func viewFromNib<T: UIView>(named name: String, filesOwner: AnyObject = NSNull.init()) throws -> T {
         let view: T = try internalViewFromNib(named: name, bundle: nil, filesOwner: filesOwner)
         return view
@@ -807,7 +824,7 @@ extension SwiftMessages {
         let view: T = try internalViewFromNib(named: name, bundle: bundle, filesOwner: filesOwner)
         return view
     }
-    
+    //内部方法
     fileprivate class func internalViewFromNib<T: UIView>(named name: String, bundle: Bundle? = nil, filesOwner: AnyObject = NSNull.init()) throws -> T {
         let resolvedBundle: Bundle
         if let bundle = bundle {
@@ -820,6 +837,7 @@ extension SwiftMessages {
             }
         }
         let arrayOfViews = resolvedBundle.loadNibNamed(name, owner: filesOwner, options: nil) ?? []
+        //swift版本
         #if swift(>=4.1)
         guard let view = arrayOfViews.compactMap( { $0 as? T} ).first else { throw SwiftMessagesError.cannotLoadViewFromNib(nibName: name) }
         #else
@@ -855,7 +873,7 @@ extension SwiftMessages {
     public static func show(config: Config, viewProvider: @escaping ViewProvider) {
         globalInstance.show(config: config, viewProvider: viewProvider)
     }
-    
+    //显示
     public static func show(view: UIView) {
         globalInstance.show(view: view)
     }

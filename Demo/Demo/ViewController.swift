@@ -10,7 +10,7 @@ import UIKit
 import SwiftMessages
 
 class ViewController: UITableViewController {
-
+    //数据
     var items: [Item] = [
         .titleBody(title: "MESSAGE VIEW", body: "SwiftMessages provides a standard message view along with a number of layouts, themes and presentation options.", function: ViewController.demoBasics),
         .titleBody(title: "ANY VIEW", body: "Any view, no matter how cute, can be displayed as a message.", function: ViewController.demoAnyView),
@@ -57,7 +57,7 @@ class ViewController: UITableViewController {
      */
 
     static func demoBasics() -> Void {
-        
+        //❌
         let error = MessageView.viewFromNib(layout: .tabView)
         error.configureTheme(.error)
         error.configureContent(title: "Error", body: "Something is horribly wrong!")
@@ -176,7 +176,7 @@ enum Item {
 
     func dequeueCell(_ tableView: UITableView) -> UITableViewCell {
         switch self {
-        case .titleBody(let data):
+        case .titleBody(let data)://元组
             let cell = tableView.dequeueReusableCell(withIdentifier: "TitleBody") as! TitleBodyCell
             cell.titleLabel.text = data.title
             cell.bodyLabel.text = data.body

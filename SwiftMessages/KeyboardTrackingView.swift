@@ -80,7 +80,7 @@ open class KeyboardTrackingView: UIView {
     @objc private func keyboardWillShow(_ notification: Notification) {
         show(change: .show, notification)
     }
-
+    //键盘隐藏
     @objc private func keyboardWillHide(_ notification: Notification) {
         guard !(isPaused || isAutomaticallyPaused),
             let userInfo = (notification as NSNotification).userInfo else { return }
@@ -88,11 +88,11 @@ open class KeyboardTrackingView: UIView {
         delegate?.keyboardTrackingViewWillChange(change: .hide, userInfo: userInfo)
         animateKeyboardChange(change: .hide, height: 0, userInfo: userInfo)
     }
-
+    //进入后台
     @objc private func pause() {
         isAutomaticallyPaused = true
     }
-
+    //进入前台
     @objc private func resume() {
         isAutomaticallyPaused = false
     }
@@ -108,7 +108,7 @@ open class KeyboardTrackingView: UIView {
         delegate?.keyboardTrackingViewWillChange(change: change, userInfo: userInfo)
         animateKeyboardChange(change: change, height: newHeight, userInfo: userInfo)
     }
-
+    //键盘隐藏
     private func animateKeyboardChange(change: Change, height: CGFloat, userInfo: [AnyHashable: Any]) {
         self.heightConstraint.constant = height
         if let durationNumber = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber,

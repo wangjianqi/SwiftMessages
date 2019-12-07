@@ -207,6 +207,7 @@ open class SwiftMessagesSegue: UIStoryboardSegue {
 
 extension SwiftMessagesSegue {
     /// A convenience method for configuring some pre-defined layouts that mirror a subset of `MessageView.Layout`.
+    //配置
     public func configure(layout: Layout) {
         messageView.bounceAnimationOffset = 0
         containment = .content
